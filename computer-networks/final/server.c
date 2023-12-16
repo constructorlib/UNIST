@@ -5,7 +5,7 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
-#include <arpa/inet.h>  // Added for htons
+#include <arpa/inet.h>  // added to override htons bug
 
 #include <ev.h>
 
@@ -16,7 +16,7 @@ struct ev_loop *loop;
 
 static void server_cb(struct ev_loop *main_loop, struct ev_io *watcher, int revents) {
     if (EV_ERROR & revents) {
-        perror("got invalid event");
+        perror("invalid event");
         return;
     }
 
@@ -35,8 +35,8 @@ static void server_cb(struct ev_loop *main_loop, struct ev_io *watcher, int reve
             printf("Client disconnected\n");
         } else {
             printf("%s\n", buffer);
-            send(new_socket, "Hello from server", 17, 0);
-            printf("Hello message sent\n");
+            send(new_socket, "Hello hello!", 17, 0);
+            printf("Hello message delivered\n");
         }
 
         close(new_socket);
@@ -50,24 +50,21 @@ int main() {
     struct sockaddr_in address;
     int opt = 1;
 
-    // Creating socket file descriptor
     if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0) {
         perror("socket failed");
         exit(EXIT_FAILURE);
     }
 
-    // Forcefully attaching socket to the port 8080
+
     if (setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt, sizeof(opt))) {
         perror("setsockopt");
         exit(EXIT_FAILURE);
     }
 
-    memset(&address, 0, sizeof(address));  // Initialize address structure
+    memset(&address, 0, sizeof(address));  
     address.sin_family = AF_INET;
     address.sin_addr.s_addr = INADDR_ANY;
     address.sin_port = htons(PORT);
-
-    // Forcefully attaching socket to the port 8080
     if (bind(server_fd, (struct sockaddr *)&address, sizeof(address)) < 0) {
         perror("bind failed");
         exit(EXIT_FAILURE);
