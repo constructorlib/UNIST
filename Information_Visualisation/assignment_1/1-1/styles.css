@@ -1,3 +1,33 @@
 /*
 Draw Kirby here!
 */
+
+.roundbody {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  border: 3px solid black;
+  align-self: center;
+  margin: 120px auto;
+  /* background-color: #ffb4dc; */
+}
+
+.handr {
+  width: 150px;
+  height: 80px;
+  /* border: 1px solid black; */
+  border-radius: 70%;
+  background-color: #ffb4dc;
+  margin: 30px -55px;
+  transform: rotate(60deg);
+}
+
+.handl {
+  width: 150px;
+  height: 80px;
+  /* border: 1px solid black; */
+  border-radius: 70%;
+  background-color: #ffb4dc;
+  margin: -90px 100px;
+  transform: rotate(45deg);
+}
