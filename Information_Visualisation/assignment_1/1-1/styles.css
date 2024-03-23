@@ -9,10 +9,13 @@ Draw Kirby here!
   border: 3px solid black;
   align-self: center;
   margin: 120px auto;
+  z-index: 999;
   /* background-color: #ffb4dc; */
 }
 
 .handr {
+  z-index: 0;
+
   width: 150px;
   height: 80px;
   /* border: 1px solid black; */
@@ -23,6 +26,7 @@ Draw Kirby here!
 }
 
 .handl {
+  z-index: 0;
   width: 150px;
   height: 80px;
   /* border: 1px solid black; */
@@ -30,4 +34,25 @@ Draw Kirby here!
   background-color: #ffb4dc;
   margin: -90px 100px;
   transform: rotate(45deg);
+}
+
+.legl {
+  width: 110px;
+  height: 60px;
+  /* border: 1px solid black; */
+  border-radius: 70%;
+  background-color: #cf4f99;
+  transform: rotate(125deg);
+  margin: 120px -5px;
+}
+.legr {
+  position: absolute;
+  z-index: 0;
+  width: 110px;
+  height: 60px;
+  /* border: 1px solid black; */
+  border-radius: 70%;
+  background-color: #cf4f99;
+  transform: rotate(45deg);
+  margin: -180px 90px;
 }
