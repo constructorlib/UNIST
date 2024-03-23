@@ -67,16 +67,32 @@ Draw Kirby here!
   margin: -180px 90px;
   border: 3px solid black;
 }
-.eyer {
+/* .eyer {
   position: absolute;
   width: 15px;
   height: 15px;
   background-color: black;
-}
+} */
 
 .eyer {
   position: absolute;
-  width: 15px;
-  height: 15px;
-  background-color: black;
+  width: 12px;
+  height: 25px;
+  border: 1px solid black;
+  border-radius: 50%;
+  border-bottom: 10px solid black;
+  margin: -290px 70px;
+  z-index: 1000;
+  background-color: white;
+}
+.eyel {
+  z-index: 1000;
+  position: absolute;
+  width: 12px;
+  margin: -290px 120px;
+  height: 25px;
+  border: 1px solid black;
+  border-radius: 50%;
+  border-bottom: 10px solid black;
+  background-color: white;
 }
