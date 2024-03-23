@@ -96,3 +96,13 @@ Draw Kirby here!
   border-bottom: 10px solid black;
   background-color: white;
 }
+.mouth {
+  width: 0;
+  height: 0;
+  border: 10px solid transparent;
+  border-bottom: 0;
+  border-top: 20px solid red;
+  position: absolute;
+  margin: -240px 95px;
+  z-index: 1000;
+}
