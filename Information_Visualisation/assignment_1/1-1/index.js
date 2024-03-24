@@ -40,16 +40,12 @@ mouth: #ff0000 or red
 //   .attr("rx", 30)
 //   .attr("ry", 30);
 
-const width = 500;
-const height = 500;
-const centerX = width / 2;
-const centerY = height / 2;
+const w = 500;
+const h = 500;
+const centerX = w / 2;
+const centerY = h / 2;
 
-const svg = d3
-  .select("body")
-  .append("svg")
-  .attr("width", width)
-  .attr("height", height);
+const svg = d3.select("body").append("svg").attr("width", w).attr("height", h);
 
 // Arms
 function drawArm(cx, cy, angle, fillColor) {
@@ -78,7 +74,7 @@ function drawFoot(cx, cy, angle, fillColor) {
     .attr("rx", 80)
     .attr("ry", 40)
     .attr("fill", fillColor)
-    .attr("class", "body-part") // Consider a more descriptive class name
+    .attr("class", "body-part")
     .attr("transform", `rotate(${angle}, ${cx}, ${cy})`)
     .style("stroke", "black")
     .style("stroke-width", 3);
@@ -94,7 +90,7 @@ svg
   .attr("cy", centerY)
   .attr("r", 100)
   .attr("fill", "#ffb4dc")
-  .attr("class", "body-part") // Consider a more descriptive class name
+  .attr("class", "body-part")
   .style("stroke", "black")
   .style("stroke-width", 3);
 
@@ -108,7 +104,7 @@ svg
     }`
   )
   .attr("fill", "red")
-  .attr("stroke", "#000000")
+  .attr("stroke", "black")
   .attr("stroke-width", 2);
 
 // Eyes
@@ -127,7 +123,7 @@ function drawEye(cx, cy) {
     .attr("cy", cy + 10)
     .attr("rx", 2)
     .attr("ry", 7)
-    .attr("fill", "#ffffff");
+    .attr("fill", "white");
 }
 
 drawEye(centerX - 20, centerY - 20);
