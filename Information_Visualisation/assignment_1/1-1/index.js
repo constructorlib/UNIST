@@ -42,113 +42,101 @@ mouth: #ff0000 or red
 
 const width = 500;
 const height = 500;
-const x0 = width / 2;
-const y0 = height / 2;
+const centerX = width / 2;
+const centerY = height / 2;
 
-const kirby = d3
+const svg = d3
   .select("body")
   .append("svg")
   .attr("width", width)
   .attr("height", height);
 
 // Arms
-kirby
-  .append("ellipse") // Left arm
-  .attr("cx", x0 - 55)
-  .attr("cy", y0 - 25)
-  .attr("rx", 80)
-  .attr("ry", 40)
-  .attr("fill", "#ffb4dc")
-  .attr("class", "main-outline")
-  .attr("transform", "rotate(65, " + (x0 - 55) + ", " + (y0 - 25) + ")")
-  .style("stroke", "black")
-  .style("stroke-width", 3);
-kirby
-  .append("ellipse") // Left arm
-  .attr("cx", x0 + 75)
-  .attr("cy", y0 - 20)
-  .attr("rx", 80)
-  .attr("ry", 40)
-  .attr("fill", "#ffb4dc")
-  .attr("class", "main-outline")
-  .attr("transform", "rotate(50, " + (x0 + 55) + ", " + (y0 - 20) + ")")
-  .style("stroke", "black")
-  .style("stroke-width", 3);
+function drawArm(cx, cy, angle, fillColor) {
+  svg
+    .append("ellipse")
+    .attr("cx", cx)
+    .attr("cy", cy)
+    .attr("rx", 80)
+    .attr("ry", 40)
+    .attr("fill", fillColor)
+    .attr("class", "body-part") // Consider a more descriptive class name
+    .attr("transform", `rotate(${angle}, ${cx}, ${cy})`)
+    .style("stroke", "black")
+    .style("stroke-width", 3);
+}
+
+drawArm(centerX - 55, centerY - 25, 65, "#ffb4dc");
+drawArm(centerX + 75, centerY - 20, 50, "#ffb4dc");
+
 // Feet
-kirby
-  .append("ellipse") // Left foot
-  .attr("cx", x0 - 30)
-  .attr("cy", y0 + 70)
-  .attr("rx", 80)
-  .attr("ry", 40)
-  .attr("fill", "#cf4f99")
-  .attr("class", "main-outline")
-  .attr("transform", "rotate(-30, " + (x0 - 30) + ", " + (y0 + 70) + ")")
-  .style("stroke", "black")
-  .style("stroke-width", 3);
-kirby
-  .append("ellipse") // Right foot
-  .attr("cx", x0 + 30)
-  .attr("cy", y0 + 70)
-  .attr("rx", 80)
-  .attr("ry", 40)
-  .attr("fill", "#cf4f99")
-  .attr("class", "main-outline")
-  .attr("transform", "rotate(30, " + (x0 + 30) + ", " + (y0 + 70) + ")")
-  .style("stroke", "black")
-  .style("stroke-width", 3);
+function drawFoot(cx, cy, angle, fillColor) {
+  svg
+    .append("ellipse")
+    .attr("cx", cx)
+    .attr("cy", cy)
+    .attr("rx", 80)
+    .attr("ry", 40)
+    .attr("fill", fillColor)
+    .attr("class", "body-part") // Consider a more descriptive class name
+    .attr("transform", `rotate(${angle}, ${cx}, ${cy})`)
+    .style("stroke", "black")
+    .style("stroke-width", 3);
+}
+
+drawFoot(centerX - 30, centerY + 70, -30, "#cf4f99");
+drawFoot(centerX + 30, centerY + 70, 30, "#cf4f99");
+
 // Body
-kirby
+svg
   .append("circle")
-  .attr("cx", x0)
-  .attr("cy", y0)
+  .attr("cx", centerX)
+  .attr("cy", centerY)
   .attr("r", 100)
   .attr("fill", "#ffb4dc")
-  .attr("class", "main-outline")
+  .attr("class", "body-part") // Consider a more descriptive class name
   .style("stroke", "black")
   .style("stroke-width", 3);
+
 // Mouth
-kirby
+svg
   .append("polygon")
-  .attr("points", `${x0 - 10},${y0} ${x0 + 10},${y0} ${x0},${y0 + 15}`)
-  .attr("fill", "#ff0000")
+  .attr(
+    "points",
+    `${centerX - 10},${centerY} ${centerX + 10},${centerY} ${centerX},${
+      centerY + 15
+    }`
+  )
+  .attr("fill", "red")
   .attr("stroke", "#000000")
   .attr("stroke-width", 2);
-// Eyes
-kirby
-  .append("ellipse") // Left-eye
-  .attr("cx", x0 - 20)
-  .attr("cy", y0 - 20)
-  .attr("rx", 5)
-  .attr("ry", 20)
-  .attr("fill", "#000000");
-kirby
-  .append("ellipse") // Left-pupil
-  .attr("cx", x0 - 20)
-  .attr("cy", y0 - 30)
-  .attr("rx", 2)
-  .attr("ry", 7)
-  .attr("fill", "#ffffff");
-kirby
-  .append("ellipse") // Right-eye
-  .attr("cx", x0 + 20)
-  .attr("cy", y0 - 20)
-  .attr("rx", 5)
-  .attr("ry", 20)
-  .attr("fill", "#000000");
-kirby
-  .append("ellipse") // Right-pupil
-  .attr("cx", x0 + 20)
-  .attr("cy", y0 - 30)
-  .attr("rx", 2)
-  .attr("ry", 7)
-  .attr("fill", "#ffffff");
 
-kirby
+// Eyes
+function drawEye(cx, cy) {
+  svg
+    .append("ellipse")
+    .attr("cx", cx)
+    .attr("cy", cy)
+    .attr("rx", 5)
+    .attr("ry", 20)
+    .attr("fill", "black");
+
+  svg
+    .append("ellipse")
+    .attr("cx", cx)
+    .attr("cy", cy + 10)
+    .attr("rx", 2)
+    .attr("ry", 7)
+    .attr("fill", "#ffffff");
+}
+
+drawEye(centerX - 20, centerY - 20);
+drawEye(centerX + 20, centerY - 20);
+svg
   .append("image")
   .attr("href", "starrod.svg")
-  .attr("x", 127)
-  .attr("y", 53)
-  .attr("width", 100)
-  .attr("height", 180)
+  .attr("x", 130)
+  .attr("y", 55)
+  .attr("width", 90)
+  .attr("height", 170)
   .attr("transform", "rotate(55, 177, 143)");
