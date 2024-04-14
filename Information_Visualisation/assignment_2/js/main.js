@@ -88,8 +88,7 @@ d3.csv("data/owid-covid-data.csv")
   .catch((error) => {
     console.error(error);
   });
-function drawBarChart(data) {
-  console.log("Data received by drawBarChart:", data);
+function drawBarChart(topCountries) {
   // Define the screen
   const margin = { top: 5, right: 30, bottom: 50, left: 120 },
     width = 800 - margin.left - margin.right,
@@ -105,79 +104,80 @@ function drawBarChart(data) {
     .attr("transform", `translate(${margin.left},${margin.top})`);
 
   /*
-      -------------------------------------------
-      YOUR CODE STARTS HERE
-  
-      TASK 2 - Data processing 
-  
-      TO-DO-LIST
-      1. Create a scale named xScale for x-axis
-      2. Create a scale named yScale for y-axis
-      3. Define a scale named cScale for color
-      4. Process the data for a stacked bar chart 
-      5. Draw Stacked bars
-      6. Draw the labels for bars
-      -------------------------------------------
-      */
+    -------------------------------------------
+    YOUR CODE STARTS HERE
 
-  // Step 1: Create a scale for x-axis
+    TASK 2 - Data processing 
+
+    TO-DO-LIST
+    1. Create a scale named xScale for x-axis
+    2. Create a scale named yScale for x-axis
+    3. Define a scale named cScale for color
+    4. Process the data for a stacked bar chart 
+    5. Draw Stacked bars
+    6. Draw the labels for bars
+    -------------------------------------------
+    */
+
+  // 1. Create a scale for x-axis
   const xScale = d3
     .scaleBand()
-    .domain(data.map((d) => d.location))
-    .range([0, width])
+    .domain(topCountries.map((d) => d.location))
+    .range([margin.left, width - margin.right])
     .padding(0.1);
 
-  // Step 2: Create a scale for y-axis
+  // 2. Create a scale for y-axis
   const yScale = d3
     .scaleLinear()
-    .domain([0, d3.max(data, (d) => d.total_rate)])
-    .range([height, 0]);
+    .domain([0, d3.max(topCountries, (d) => d.total_vaccinated_rate)])
+    .range([height - margin.bottom, margin.top]);
 
-  // Step 3: Define a scale for color
+  // 3. Define a scale for color
   const cScale = d3
     .scaleOrdinal()
     .domain(["fully_vaccinated_rate", "partially_vaccinated_rate"])
     .range(["#7bccc4", "#2b8cbe"]);
 
+  // 4. Process the data for a stacked bar chart
   const stackedData = d3
     .stack()
-    .keys(["fully_vaccinated_rate", "partially_vaccinated_rate"])
-    .order(d3.stackOrderNone)
-    .offset(d3.stackOffsetNone)(data);
+    .keys(["fully_vaccinated_rate", "partially_vaccinated_rate"])(topCountries);
 
-  // Step 5: Draw Stacked bars
+  // 5. Draw Stacked bars
   svg
-    .selectAll(".bar")
+    .selectAll("g.bar-group")
     .data(stackedData)
     .enter()
     .append("g")
+    .attr("class", "bar-group")
     .attr("fill", (d) => cScale(d.key))
     .selectAll("rect")
     .data((d) => d)
     .enter()
     .append("rect")
-    .attr("x", (d) => xScale(d.data.location))
+    .attr("x", (d, i) => xScale(d.data.location))
     .attr("y", (d) => yScale(d[1]))
     .attr("height", (d) => yScale(d[0]) - yScale(d[1]))
     .attr("width", xScale.bandwidth());
 
-  // Step 6: Draw the labels for bars
+  // 6. Draw the labels for bars
   svg
-    .selectAll(".label")
-    .data(data)
+    .selectAll(".bar-label")
+    .data(topCountries)
     .enter()
     .append("text")
-    .attr("class", "label")
+    .attr("class", "bar-label")
     .attr("x", (d) => xScale(d.location) + xScale.bandwidth() / 2)
-    .attr("y", (d) => yScale(d.total_rate) - 5)
+    .attr("y", (d) => yScale(d.total_vaccinated_rate) - 5)
     .attr("text-anchor", "middle")
     .attr("font-size", "12px")
-    .text((d) => d.location);
+    .text((d) => `${d.total_vaccinated_rate.toFixed(2)}%`);
   /*
-      -------------------------------------------
-      YOUR CODE ENDS HERE
-      -------------------------------------------
-      */
+  /*
+    -------------------------------------------
+    YOUR CODE ENDS HERE
+    -------------------------------------------
+    */
 
   // Define the position of each axis
   const xAxis = d3.axisBottom(xScale);
