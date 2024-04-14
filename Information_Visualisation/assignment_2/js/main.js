@@ -20,45 +20,48 @@ d3.csv("data/owid-covid-data.csv")
         7. Extract Top 15 countries 
         -------------------------------------------
         */
-    // Step 1: Exclude data with missing values
+    // Step 1: Exclude data with missing values on columns needed
     data = data.filter(
-      (d) => !isNaN(d.fully_vaccinated) && !isNaN(d.partially_vaccinated)
+      (d) =>
+        !isNaN(d.fully_vaccinated) &&
+        !isNaN(d.partially_vaccinated) &&
+        !isNaN(d.population)
     );
 
-    // Step 2: Exclude data except for Asia
+    // Step 2: Exclude data except for Asian countries
     data = data.filter((d) => d.continent === "Asia");
 
-    // Step 3: Calculate rates
+    // Step 3: Calculate the rate of vaccinated people
     data.forEach((d) => {
-      d.total_rate =
+      d.total_vaccinated_rate =
         ((+d.fully_vaccinated + +d.partially_vaccinated) / +d.population) * 100;
       d.fully_vaccinated_rate = (+d.fully_vaccinated / +d.population) * 100;
       d.partially_vaccinated_rate =
         (+d.partially_vaccinated / +d.population) * 100;
     });
 
-    // Step 4: Exclude data where total rate is over 100%
-    data = data.filter((d) => d.total_rate <= 100);
+    // Step 4: Exclude data where total rate of vaccinated people is over 100%
+    data = data.filter((d) => d.total_vaccinated_rate <= 100);
 
     // Step 5: Exclude all data except the latest data for each country
-    const latestData = new Map();
+    const latestDataMap = new Map();
     data.forEach((d) => {
+      const country = d.location;
       if (
-        !latestData.has(d.location) ||
-        d.date > latestData.get(d.location).date
+        !latestDataMap.has(country) ||
+        d.date > latestDataMap.get(country).date
       ) {
-        latestData.set(d.location, d);
+        latestDataMap.set(country, d);
       }
     });
-    data = Array.from(latestData.values());
+    data = Array.from(latestDataMap.values());
 
-    // Step 6: Sort data by total rate of vaccinated people in descending order
-    data.sort((a, b) => b.total_rate - a.total_rate);
+    // Step 6: Sort the data with descending order by total rate of vaccinated people
+    data.sort((a, b) => b.total_vaccinated_rate - a.total_vaccinated_rate);
 
     // Step 7: Extract Top 15 countries
-    const topCountries = data.slice(0, 15);
-    console.log(topCountries);
-    const processedData = topCountries;
+    const processedData = data.slice(0, 15);
+    console.log(processedData);
 
     /*
         -------------------------------------------
@@ -72,7 +75,6 @@ d3.csv("data/owid-covid-data.csv")
   .catch((error) => {
     console.error(error);
   });
-
 function drawBarChart(data) {
   // Define the screen
   const margin = { top: 5, right: 30, bottom: 50, left: 120 },
