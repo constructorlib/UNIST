@@ -23,7 +23,7 @@ d3.csv("data/owid-covid-data.csv")
         -------------------------------------------
         */
     // Step 1: Exclude data with missing values on columns needed
-    const processedData = data.filter(
+    processedData = data.filter(
       (d) =>
         d.iso_code &&
         d.continent &&
@@ -39,7 +39,7 @@ d3.csv("data/owid-covid-data.csv")
     const asianCountries = processedData.filter((d) => d.continent === "Asia");
     console.log("Data after Step 2:", asianCountries);
     // Step 3: Calculate the rate of vaccinated people
-    const vaccinatedData = processedData.map((d) => ({
+    const asianCountriesWithRates = asianCountries.map((d) => ({
       ...d,
       fully_vaccinated_rate: (d.people_fully_vaccinated / d.population) * 100,
       partially_vaccinated_rate:
@@ -47,13 +47,16 @@ d3.csv("data/owid-covid-data.csv")
         100,
       total_vaccinated_rate: (d.people_vaccinated / d.population) * 100,
     }));
-    console.log("Data after Step 3:", vaccinatedData);
+    console.log("Data after Step 3:", asianCountriesWithRates);
     // Step 4: Exclude data where total rate of vaccinated people is over 100%
-    data = data.filter((d) => d.total_vaccinated_rate <= 100);
+    const filteredAsianCountries = asianCountriesWithRates.filter(
+      (d) => d.total_vaccinated_rate <= 100
+    );
+    console.log("Data after Step 4:", filteredAsianCountries);
 
     // Step 5: Exclude all data except the latest data for each country
     const latestDataMap = new Map();
-    data.forEach((d) => {
+    filteredAsianCountries.forEach((d) => {
       const country = d.location;
       if (
         !latestDataMap.has(country) ||
@@ -62,8 +65,8 @@ d3.csv("data/owid-covid-data.csv")
         latestDataMap.set(country, d);
       }
     });
-    data = Array.from(latestDataMap.values());
-
+    const latestAsianData = Array.from(latestDataMap.values());
+    console.log("Data after Step 5:", latestAsianData);
     // Step 6: Sort the data with descending order by total rate of vaccinated people
     data.sort((a, b) => b.total_vaccinated_rate - a.total_vaccinated_rate);
 
