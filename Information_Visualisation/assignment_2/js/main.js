@@ -22,6 +22,8 @@ d3.csv("data/owid-covid-data.csv")
         7. Extract Top 15 countries 
         -------------------------------------------
         */
+
+    // TASK 1 STARTS HERE
     // Step 1: Exclude data with missing values on columns needed
     processedData = data.filter(
       (d) =>
@@ -34,7 +36,6 @@ d3.csv("data/owid-covid-data.csv")
         d.people_fully_vaccinated
     );
     console.log("Data after Step 1:", processedData);
-
     // Step 2: Exclude data except for Asian countries
     const asianCountries = processedData.filter((d) => d.continent === "Asia");
     console.log("Data after Step 2:", asianCountries);
@@ -54,7 +55,6 @@ d3.csv("data/owid-covid-data.csv")
     );
     console.log("Data after Step 4:", filteredAsianCountries);
     // Step 5: Exclude all data except the latest data for each country
-    // Step 5: Exclude all data except the latest data for each country
     const latestDataMap = new Map();
     filteredAsianCountries.forEach((d) => {
       const country = d.location;
@@ -67,7 +67,6 @@ d3.csv("data/owid-covid-data.csv")
     });
     const latestAsianData = Array.from(latestDataMap.values());
     console.log("Data after Step 5:", latestAsianData);
-
     // Step 6: Sort the data with descending order by total rate of vaccinated people
     latestAsianData.sort(
       (a, b) => b.total_vaccinated_rate - a.total_vaccinated_rate
@@ -76,12 +75,13 @@ d3.csv("data/owid-covid-data.csv")
     // Step 7: Extract Top 15 countries
     const topCountries = latestAsianData.slice(0, 15);
     console.log("Top 15 Countries:", topCountries);
+
     /*
         -------------------------------------------
         YOUR CODE ENDS HERE
         -------------------------------------------
-        */
-
+        
+    */
     drawBarChart(topCountries);
     console.log("Processed Data:", topCountries);
   })
