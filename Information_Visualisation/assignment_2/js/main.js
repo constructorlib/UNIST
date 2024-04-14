@@ -25,16 +25,29 @@ d3.csv("data/owid-covid-data.csv")
 
     // TASK 1 STARTS HERE
     // Step 1: Exclude data with missing values on columns needed
-    processedData = data.filter(
-      (d) =>
-        d.iso_code &&
-        d.continent &&
-        d.location &&
-        d.date &&
-        d.population &&
-        d.people_vaccinated &&
-        d.people_fully_vaccinated
-    );
+    processedData = data.filter((d) => {
+      // Check if all necessary fields exist and are not falsy
+      const hasEssentialFields =
+        d.hasOwnProperty("iso_code") &&
+        d.hasOwnProperty("continent") &&
+        d.hasOwnProperty("location") &&
+        d.hasOwnProperty("date") &&
+        d.hasOwnProperty("population") &&
+        d.hasOwnProperty("people_vaccinated") &&
+        d.hasOwnProperty("people_fully_vaccinated");
+
+      // If all essential fields are present and truthy, keep the data point
+      return (
+        hasEssentialFields &&
+        !!d.iso_code &&
+        !!d.continent &&
+        !!d.location &&
+        !!d.date &&
+        !!d.population &&
+        !!d.people_vaccinated &&
+        !!d.people_fully_vaccinated
+      );
+    });
     console.log("Data after Step 1:", processedData);
     // Step 2: Exclude data except for Asian countries
     const asianCountries = processedData.filter((d) => d.continent === "Asia");
