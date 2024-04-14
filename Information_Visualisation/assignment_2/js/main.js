@@ -102,7 +102,6 @@ function drawBarChart(topCountries) {
     .attr("height", height + margin.top + margin.bottom)
     .append("g")
     .attr("transform", `translate(${margin.left},${margin.top})`);
-
   /*
     -------------------------------------------
     YOUR CODE STARTS HERE
@@ -119,18 +118,18 @@ function drawBarChart(topCountries) {
     -------------------------------------------
     */
 
-  // 1. Create a scale for x-axis
-  const xScale = d3
+  // 1. Create a scale for y-axis (formerly x-axis)
+  const yScale = d3
     .scaleBand()
     .domain(topCountries.map((d) => d.location))
-    .range([margin.left, width - margin.right])
+    .range([margin.top, height - margin.bottom])
     .padding(0.1);
 
-  // 2. Create a scale for y-axis
-  const yScale = d3
+  // 2. Create a scale for x-axis (formerly y-axis)
+  const xScale = d3
     .scaleLinear()
     .domain([0, d3.max(topCountries, (d) => d.total_vaccinated_rate)])
-    .range([height - margin.bottom, margin.top]);
+    .range([margin.left, width - margin.right]);
 
   // 3. Define a scale for color
   const cScale = d3
@@ -155,10 +154,10 @@ function drawBarChart(topCountries) {
     .data((d) => d)
     .enter()
     .append("rect")
-    .attr("x", (d, i) => xScale(d.data.location))
-    .attr("y", (d) => yScale(d[1]))
-    .attr("height", (d) => yScale(d[0]) - yScale(d[1]))
-    .attr("width", xScale.bandwidth());
+    .attr("y", (d, i) => yScale(d.data.location))
+    .attr("x", (d) => xScale(d[0]))
+    .attr("width", (d) => xScale(d[1]) - xScale(d[0]))
+    .attr("height", yScale.bandwidth());
 
   // 6. Draw the labels for bars
   svg
@@ -167,12 +166,12 @@ function drawBarChart(topCountries) {
     .enter()
     .append("text")
     .attr("class", "bar-label")
-    .attr("x", (d) => xScale(d.location) + xScale.bandwidth() / 2)
-    .attr("y", (d) => yScale(d.total_vaccinated_rate) - 5)
-    .attr("text-anchor", "middle")
+    .attr("x", (d) => xScale(d.total_vaccinated_rate) + 5) // Adjust position since x and y are swapped
+    .attr("y", (d) => yScale(d.location) + yScale.bandwidth() / 2) // Adjust position since x and y are swapped
+    .attr("text-anchor", "start") // Adjust alignment since x and y are swapped
     .attr("font-size", "12px")
     .text((d) => `${d.total_vaccinated_rate.toFixed(2)}%`);
-  /*
+
   /*
     -------------------------------------------
     YOUR CODE ENDS HERE
