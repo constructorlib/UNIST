@@ -53,7 +53,7 @@ d3.csv("data/owid-covid-data.csv")
       (d) => d.total_vaccinated_rate <= 100
     );
     console.log("Data after Step 4:", filteredAsianCountries);
-
+    // Step 5: Exclude all data except the latest data for each country
     // Step 5: Exclude all data except the latest data for each country
     const latestDataMap = new Map();
     filteredAsianCountries.forEach((d) => {
@@ -67,13 +67,15 @@ d3.csv("data/owid-covid-data.csv")
     });
     const latestAsianData = Array.from(latestDataMap.values());
     console.log("Data after Step 5:", latestAsianData);
+
     // Step 6: Sort the data with descending order by total rate of vaccinated people
-    data.sort((a, b) => b.total_vaccinated_rate - a.total_vaccinated_rate);
+    latestAsianData.sort(
+      (a, b) => b.total_vaccinated_rate - a.total_vaccinated_rate
+    );
 
     // Step 7: Extract Top 15 countries
-    const topCountries = data.slice(0, 15);
+    const topCountries = latestAsianData.slice(0, 15);
     console.log("Top 15 Countries:", topCountries);
-
     /*
         -------------------------------------------
         YOUR CODE ENDS HERE
