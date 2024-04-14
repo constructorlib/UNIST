@@ -4,6 +4,8 @@ console.log("hello world!");
 
 d3.csv("data/owid-covid-data.csv")
   .then((data) => {
+    console.log("CSV Data:", data);
+
     /*
         -------------------------------------------
         YOUR CODE STARTS HERE
@@ -27,6 +29,7 @@ d3.csv("data/owid-covid-data.csv")
         !isNaN(d.partially_vaccinated) &&
         !isNaN(d.population)
     );
+    console.log("Data after Step 1:", data);
 
     // Step 2: Exclude data except for Asian countries
     data = data.filter((d) => d.continent === "Asia");
@@ -70,12 +73,13 @@ d3.csv("data/owid-covid-data.csv")
         */
 
     drawBarChart(processedData);
-    console.log(processedData);
+    console.log("Processed Data:", processedData);
   })
   .catch((error) => {
     console.error(error);
   });
 function drawBarChart(data) {
+  console.log("Data received by drawBarChart:", data);
   // Define the screen
   const margin = { top: 5, right: 30, bottom: 50, left: 120 },
     width = 800 - margin.left - margin.right,
