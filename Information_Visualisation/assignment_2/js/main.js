@@ -4,90 +4,54 @@ console.log("hello world!");
 
 d3.csv("data/owid-covid-data.csv")
   .then((data) => {
-    // Task 1 - Data Processing
+    console.log("CSV Data:", data);
 
-    // 1. Exclude data with missing values on columns needed
-    const columnsNeeded = [
-      "total_cases",
-      "new_cases",
-      "total_deaths",
-      "new_deaths",
-      "total_cases_per_million",
-      "new_cases_per_million",
-      "total_deaths_per_million",
-      "new_deaths_per_million",
-      "reproduction_rate",
-      "icu_patients",
-      "icu_patients_per_million",
-      "hosp_patients",
-      "hosp_patients_per_million",
-      "weekly_icu_admissions",
-      "weekly_icu_admissions_per_million",
-      "weekly_hosp_admissions",
-      "weekly_hosp_admissions_per_million",
-      "total_tests",
-      "new_tests",
-      "total_tests_per_thousand",
-      "new_tests_per_thousand",
-      "new_tests_smoothed",
-      "new_tests_smoothed_per_thousand",
-      "positive_rate",
-      "tests_per_case",
-      "total_vaccinations",
-      "people_vaccinated",
-      "people_fully_vaccinated",
-      "total_boosters",
-      "new_vaccinations",
-      "new_vaccinations_smoothed",
-      "total_vaccinations_per_hundred",
-      "people_vaccinated_per_hundred",
-      "people_fully_vaccinated_per_hundred",
-      "total_boosters_per_hundred",
-      "new_vaccinations_smoothed_per_million",
-      "new_people_vaccinated_smoothed",
-      "new_people_vaccinated_smoothed_per_hundred",
-      "stringency_index",
-      "population_density",
-      "median_age",
-      "aged_65_older",
-      "aged_70_older",
-      "gdp_per_capita",
-      "extreme_poverty",
-      "cardiovasc_death_rate",
-      "diabetes_prevalence",
-      "female_smokers",
-      "male_smokers",
-      "handwashing_facilities",
-      "hospital_beds_per_thousand",
-      "life_expectancy",
-      "human_development_index",
-      "population",
-      "excess_mortality_cumulative_absolute",
-      "excess_mortality_cumulative",
-      "excess_mortality",
-      "excess_mortality_cumulative_per_million",
-    ];
+    /*
+        -------------------------------------------
+        YOUR CODE STARTS HERE
 
-    data = data.filter((d) => columnsNeeded.every((col) => !isNaN(d[col])));
+        TASK 1 - Data Processing 
 
-    // 2. Exclude data except for Asian countries
-    data = data.filter((d) => d.continent === "Asia");
+        TO-DO-LIST
+        1. Exclude data which contain missing values on columns you need
+        2. Exclude data all data except the data where the continent is Asia 
+        3. Calculate the rate of fully vaccinated people, partially vaccinated people, and total rate of vaccinated people
+        4. Exclude data where total rate of vaccinated people is over 100%
+        5. Exclude all data except the latest data for each country
+        6. Sort the data with descending order by total reat of vaccinated people
+        7. Extract Top 15 countries 
+        -------------------------------------------
+        */
+    // Step 1: Exclude data with missing values on columns needed
+    const processedData = data.filter(
+      (d) =>
+        d.iso_code &&
+        d.continent &&
+        d.location &&
+        d.date &&
+        d.population &&
+        d.people_vaccinated &&
+        d.people_fully_vaccinated
+    );
+    console.log("Data after Step 1:", processedData);
 
-    // 3. Calculate the rate of vaccinated people
-    data.forEach((d) => {
-      d.total_vaccinated_rate =
-        ((+d.people_fully_vaccinated + +d.people_vaccinated) / +d.population) *
-        100;
-      d.fully_vaccinated_rate =
-        (+d.people_fully_vaccinated / +d.population) * 100;
-      d.partially_vaccinated_rate =
-        (+d.people_vaccinated / +d.population) * 100;
-    });
-
-    // 4. Exclude data where total rate of vaccinated people is over 100%
+    // Step 2: Exclude data except for Asian countries
+    const asianCountries = processedData.filter((d) => d.continent === "Asia");
+    console.log("Data after Step 2:", asianCountries);
+    // Step 3: Calculate the rate of vaccinated people
+    const vaccinatedData = processedData.map((d) => ({
+      ...d,
+      fully_vaccinated_rate: (d.people_fully_vaccinated / d.population) * 100,
+      partially_vaccinated_rate:
+        ((d.people_vaccinated - d.people_fully_vaccinated) / d.population) *
+        100,
+      total_vaccinated_rate: (d.people_vaccinated / d.population) * 100,
+    }));
+    console.log("Data after Step 3:", vaccinatedData);
+    // Step 4: Exclude data where total rate of vaccinated people is over 100%
     data = data.filter((d) => d.total_vaccinated_rate <= 100);
 
-    // 5. Exclude all data except the latest data for each country
+    // Step 5: Exclude all data except the latest data for each country
     const latestDataMap = new Map();
     data.forEach((d) => {
       const country = d.location;
@@ -100,14 +64,21 @@ d3.csv("data/owid-covid-data.csv")
     });
     data = Array.from(latestDataMap.values());
 
-    // 6. Sort the data with descending order by total rate of vaccinated people
+    // Step 6: Sort the data with descending order by total rate of vaccinated people
     data.sort((a, b) => b.total_vaccinated_rate - a.total_vaccinated_rate);
 
-    // 7. Extract Top 15 countries
-    const processedData = data.slice(0, 15);
+    // Step 7: Extract Top 15 countries
+    const topCountries = data.slice(0, 15);
+    console.log("Top 15 Countries:", topCountries);
 
-    drawBarChart(processedData);
-    console.log("Processed Data:", processedData);
+    /*
+        -------------------------------------------
+        YOUR CODE ENDS HERE
+        -------------------------------------------
+        */
+
+    drawBarChart(topCountries);
+    console.log("Processed Data:", topCountries);
   })
   .catch((error) => {
     console.error(error);
