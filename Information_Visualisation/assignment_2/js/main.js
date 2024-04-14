@@ -25,9 +25,64 @@ d3.csv("data/owid-covid-data.csv")
     // Step 1: Exclude data with missing values on columns needed
     data = data.filter(
       (d) =>
-        !isNaN(d.fully_vaccinated) &&
-        !isNaN(d.partially_vaccinated) &&
-        !isNaN(d.population)
+        !isNaN(d.total_cases) &&
+        !isNaN(d.new_cases) &&
+        !isNaN(d.total_deaths) &&
+        !isNaN(d.new_deaths) &&
+        !isNaN(d.total_cases_per_million) &&
+        !isNaN(d.new_cases_per_million) &&
+        !isNaN(d.total_deaths_per_million) &&
+        !isNaN(d.new_deaths_per_million) &&
+        !isNaN(d.reproduction_rate) &&
+        !isNaN(d.icu_patients) &&
+        !isNaN(d.icu_patients_per_million) &&
+        !isNaN(d.hosp_patients) &&
+        !isNaN(d.hosp_patients_per_million) &&
+        !isNaN(d.weekly_icu_admissions) &&
+        !isNaN(d.weekly_icu_admissions_per_million) &&
+        !isNaN(d.weekly_hosp_admissions) &&
+        !isNaN(d.weekly_hosp_admissions_per_million) &&
+        !isNaN(d.total_tests) &&
+        !isNaN(d.new_tests) &&
+        !isNaN(d.total_tests_per_thousand) &&
+        !isNaN(d.new_tests_per_thousand) &&
+        !isNaN(d.new_tests_smoothed) &&
+        !isNaN(d.new_tests_smoothed_per_thousand) &&
+        !isNaN(d.positive_rate) &&
+        !isNaN(d.tests_per_case) &&
+        !isNaN(d.total_vaccinations) &&
+        !isNaN(d.people_vaccinated) &&
+        !isNaN(d.people_fully_vaccinated) &&
+        !isNaN(d.total_boosters) &&
+        !isNaN(d.new_vaccinations) &&
+        !isNaN(d.new_vaccinations_smoothed) &&
+        !isNaN(d.total_vaccinations_per_hundred) &&
+        !isNaN(d.people_vaccinated_per_hundred) &&
+        !isNaN(d.people_fully_vaccinated_per_hundred) &&
+        !isNaN(d.total_boosters_per_hundred) &&
+        !isNaN(d.new_vaccinations_smoothed_per_million) &&
+        !isNaN(d.new_people_vaccinated_smoothed) &&
+        !isNaN(d.new_people_vaccinated_smoothed_per_hundred) &&
+        !isNaN(d.stringency_index) &&
+        !isNaN(d.population_density) &&
+        !isNaN(d.median_age) &&
+        !isNaN(d.aged_65_older) &&
+        !isNaN(d.aged_70_older) &&
+        !isNaN(d.gdp_per_capita) &&
+        !isNaN(d.extreme_poverty) &&
+        !isNaN(d.cardiovasc_death_rate) &&
+        !isNaN(d.diabetes_prevalence) &&
+        !isNaN(d.female_smokers) &&
+        !isNaN(d.male_smokers) &&
+        !isNaN(d.handwashing_facilities) &&
+        !isNaN(d.hospital_beds_per_thousand) &&
+        !isNaN(d.life_expectancy) &&
+        !isNaN(d.human_development_index) &&
+        !isNaN(d.population) &&
+        !isNaN(d.excess_mortality_cumulative_absolute) &&
+        !isNaN(d.excess_mortality_cumulative) &&
+        !isNaN(d.excess_mortality) &&
+        !isNaN(d.excess_mortality_cumulative_per_million)
     );
     console.log("Data after Step 1:", data);
 
