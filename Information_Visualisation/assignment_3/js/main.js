@@ -157,7 +157,7 @@ function drawBarChart(data) {
       xScale(d.people_fully_vaccinated + d.people_partially_vaccinated)
     )
     .attr("height", yScale.bandwidth())
-    .attr("fill", "steelblue") // Ensure the bars retain their original color
+    .attr("fill", "#7bccc4") // Original color
     // [your code 2] Add event listeners for tooltip & toggle color into barChart
     .on("mouseover", function (event, d) {
       d3.select(this).attr("fill", "orange");
@@ -181,8 +181,23 @@ function drawBarChart(data) {
         .style("top", event.pageY + 10 + "px");
     })
     .on("mouseout", function (event, d) {
-      d3.select(this).attr("fill", "steelblue"); // Revert bar color to original
+      d3.select(this).attr("fill", function () {
+        // Revert to original color if not toggled
+        return d3.select(this).attr("data-clicked") === "true"
+          ? "#2b8cbe"
+          : "#7bccc4";
+      });
       tooltip.transition().duration(500).style("opacity", 0);
+    })
+    .on("click", function (event, d) {
+      const currentColor = d3.select(this).attr("fill");
+      const newColor = currentColor === "#7bccc4" ? "#2b8cbe" : "#7bccc4";
+      d3.select(this).attr("fill", newColor);
+      // Toggle data-clicked attribute
+      d3.select(this).attr(
+        "data-clicked",
+        newColor === "#2b8cbe" ? "true" : "false"
+      );
     });
   // [your code 2] ends here
 
