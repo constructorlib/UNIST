@@ -99,7 +99,7 @@ function drawBarChart(data) {
     .range([0, height])
     .padding(0.2);
 
-  // Tooltip Temlplate
+  // Tooltip Template
   const tooltip = d3
     .select("#chart")
     .append("div")
@@ -158,18 +158,33 @@ function drawBarChart(data) {
     )
     .attr("height", yScale.bandwidth())
     .attr("fill", "steelblue") // Ensure the bars retain their original color
-    .on("mouseover", (event, d) => {
+    // [your code 2] Add event listeners for tooltip & toggle color into barChart
+    .on("mouseover", function (event, d) {
+      d3.select(this).attr("fill", "orange");
       tooltip.transition().duration(200).style("opacity", 0.9);
       tooltip
         .html(
-          `Country: ${d.location}<br/>Fully Vaccinated: ${d.people_fully_vaccinated}%<br/>Partially Vaccinated: ${d.people_partially_vaccinated}%`
+          `Country: ${d.location}<br/>Population: ${
+            d.population
+          }<br/>Fully Vaccinated: ${d.people_fully_vaccinated.toFixed(
+            2
+          )}%<br/>Partially Vaccinated: ${d.people_partially_vaccinated.toFixed(
+            2
+          )}%`
         )
-        .style("left", event.pageX + "px")
-        .style("top", event.pageY - 28 + "px");
+        .style("left", event.pageX + 10 + "px") // Positioning tooltip to the bottom right of the cursor
+        .style("top", event.pageY + 10 + "px");
     })
-    .on("mouseout", (event, d) => {
+    .on("mousemove", function (event, d) {
+      tooltip
+        .style("left", event.pageX + 10 + "px") // Update position as cursor moves
+        .style("top", event.pageY + 10 + "px");
+    })
+    .on("mouseout", function (event, d) {
+      d3.select(this).attr("fill", "steelblue"); // Revert bar color to original
       tooltip.transition().duration(500).style("opacity", 0);
     });
+  // [your code 2] ends here
 
   // Add the x Axis
   svg
@@ -198,7 +213,7 @@ const bar = svg.append("g").attr("clip-path", "url(#clip)");
 
 // Create bars
 const barChart = bar
-  .selectAll("g")
+  .selectAll("rect")
   .data(data)
   .enter()
   .append("rect")
@@ -207,7 +222,7 @@ const barChart = bar
   .attr("y", (d) => yScale(d.location))
   .attr("width", (d) => xScale(d.people_vaccinated))
   .attr("height", yScale.bandwidth());
-// [your code 2] Add event listeners for toolitp & toggle color into barChart
+// [your code 2] Add event listeners for tooltip & toggle color into barChart
 
 // [your code 2] ends here
 
@@ -234,16 +249,4 @@ function toggleColor(event, d) {}
 
 // [your code 3] ends here
 
-// [your code 4] Define function for zoom
-function updateChart(event) {}
-
-// [your code 4] ends here
-
-// [your code 5] Define functions for tooltips
-function showTooltip(event, d) {}
-
-function moveTooltip(event, d) {}
-
-function hideTooltip(event, d) {}
-
-// [your code 5] ends here
+// [your code 4] Define
