@@ -164,9 +164,9 @@ function drawBarChart(data) {
       tooltip.transition().duration(200).style("opacity", 0.9);
       tooltip
         .html(
-          `Country: ${d.location}<br/>Population: ${
+          `Country: ${d.location}<br/>Population: ${parseInt(
             d.population
-          }<br/>Fully Vaccinated: ${d.people_fully_vaccinated.toFixed(
+          ).toLocaleString()}<br/>Fully Vaccinated: ${d.people_fully_vaccinated.toFixed(
             2
           )}%<br/>Partially Vaccinated: ${d.people_partially_vaccinated.toFixed(
             2
