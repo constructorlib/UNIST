@@ -132,6 +132,9 @@ class barChart {
             .on("mouseout", bubble.disableHighlightBubble)
         // [Your Code Here]
         // Add click event for line chart
+            .on("click", function (event, d) {
+                line.manageLineChart(d.data.location);
+            });
 
 
         // Draw the labels for bars
@@ -221,6 +224,32 @@ class barChart {
     filterBarDataBySelection(selectionList) {
         // [Your Code Here]
         // Implement updating bar chart by brush interaction
+        const currentData = bar.data.filter(d => {return bar.currentContinentList.includes(d.continent);});
+        var filteredData = currentData.filter(d => selectionList.includes(d.location));
+        if (filteredData.length == 0)
+            filteredData = currentData;
+        
+        // Get latest datum of each country
+        var processedData = [];
+        var countryList = [];
+        for (var d of filteredData) {
+            if (!bar.currentContinentList.includes(d.continent))
+                continue;
+            if (!countryList.includes(d.location)) {
+                processedData.push(d);
+                countryList.push(d.location);
+            }
+        }
+
+        // Sort by total rate and slice Top 15 elements
+        processedData = processedData.sort((a, b) => (b.people_fully_vaccinated + b.people_partially_vaccinated) - (a.people_fully_vaccinated + a.people_partially_vaccinated)).slice(0, 15);
+
+        // Delete existing bar chart
+        d3.select("#barchart").select("svg").remove();
+        d3.select("#barlegend").select("svg").remove();
+
+        // Draw the updated bar chart
+        bar.drawBarChart(processedData, countryList);
     }
 
 

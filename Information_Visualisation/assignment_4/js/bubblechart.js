@@ -75,6 +75,13 @@ class BubbleChart {
         // [Your Code Here]
         // Add brush event here
 
+        const brush = d3.brush()
+                .extent([[0, 0], [width, height]])
+                .on("start brush end", updateChart);
+        svg.append("g")
+            .attr("class", "brush")
+            .call(brush);
+
 
         // Scale for x-axis
         const xScale = d3.scaleLinear().domain([-20000, d3.max(data, function (d) { return d.gdp_per_capita }) * 1.1]).range([0, width])
@@ -113,6 +120,9 @@ class BubbleChart {
             .on("mouseleave", hideTooltip)
         // [Your Code Here]
         // Add click event for line chart
+            .on("click", function (event, d) {
+                line.manageLineChart(d.location);
+            });
 
 
         // Draw axes 
@@ -175,11 +185,30 @@ class BubbleChart {
         // [Your Code Here]
         // Update bubble chart and update bar chart by brushing
         function updateChart(event) {
+            const extent = event.selection;
+            circle_enter.classed("selected", function (d) {
+                return isBrushed(extent, xScale(d.gdp_per_capita), yScale(d.life_expectancy));
+            });
+            const selectedBubbles = data.filter(d =>
+                isBrushed(extent, xScale(d.gdp_per_capita), yScale(d.life_expectancy))
+            );
+            // Update the bar chart with selected bubbles
+            bar.filterBarDataBySelection(selectedBubbles.map(d => d.location));
+            d3.selectAll(".bubbles").classed("selected", function(d) {
+                return selectedBubbles.includes(d);
+            }).attr("stroke", function(d) {
+                return selectedBubbles.includes(d) ? "blue" : "black";
+            }).attr("stroke-width", function(d) {
+                return selectedBubbles.includes(d) ? 3 : 1;
+            });
         }
 
         // [Your Code Here]
         // Implement function checking if the circles are in the brush area
         function isBrushed(brushArea, cx, cy) {
+            if (!brushArea) return;
+            const [[x0, y0], [x1, y1]] = brushArea;
+            return x0 <= cx && cx <= x1 && y0 <= cy && cy <= y1;
         }
 
 

@@ -1,0 +1,23 @@
+# Node.js
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Express
+.env
+
+# IDE/Editor
+.vscode/
+.idea/
+
+# Logs
+logs/
+*.log
+
+# Build output
+dist/
+build/
+
+# Dependency lock files
+package-lock.json
+yarn.lock
